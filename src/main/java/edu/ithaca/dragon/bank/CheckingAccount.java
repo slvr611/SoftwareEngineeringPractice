@@ -1,8 +1,7 @@
 package edu.ithaca.dragon.bank;
-
 import java.util.ArrayList;
 
-public class BankAccount {
+public class CheckingAccount {
 
     protected String email, password;
     protected double balance;
@@ -11,7 +10,7 @@ public class BankAccount {
     /**
      * @throws IllegalArgumentException if email or starting balance is invalid
      */
-    public BankAccount(String email, String password, double startingBalance) {
+    public CheckingAccount(String email, String password, double startingBalance) {
         if (isEmailValid(email)) {
             this.email = email;
         } else {
@@ -31,6 +30,10 @@ public class BankAccount {
 
     public double getBalance() {
         return balance;
+    }
+
+    public void setBalance(double amount) {
+        this.balance = amount;
     }
 
     public String getEmail() {
@@ -99,7 +102,7 @@ public class BankAccount {
      * @throws IllegalArgumentException if amount is not valid (see isAmountValid() )
      * @throws InsufficientFundsException if the account doesn't have enough to transfer the given amount out
      */
-    public void transfer(double amount, BankAccount targetAccount) throws InsufficientFundsException {
+    public void transfer(double amount, CheckingAccount targetAccount) throws InsufficientFundsException {
         this.withdraw(amount, "Transfer out");
         targetAccount.deposit(amount, "Transfer in");
     }
@@ -119,8 +122,8 @@ public class BankAccount {
      * @return true if any account events in history are suspicious
      */
     public boolean checkSuspicious(){
-        for(int i = 0; i < history.size(); i++){
-            if(history.get(i).suspicious)
+        for (AccountEvent accountEvent : history) {
+            if (accountEvent.suspicious)
                 return true;
         }
         return false;

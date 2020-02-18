@@ -1,7 +1,5 @@
 package edu.ithaca.dragon.bank;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 public class ATMUI {
     protected CentralBank bank;
     protected String account;

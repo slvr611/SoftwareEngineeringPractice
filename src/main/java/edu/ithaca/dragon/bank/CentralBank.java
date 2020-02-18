@@ -7,10 +7,10 @@ import java.util.Map;
 
 public class CentralBank implements AdvancedAPI, AdminAPI {
 
-    protected Map<String, BankAccount> acctMap;
+    protected Map<String, CheckingAccount> acctMap;
 
     CentralBank(){
-        acctMap = new HashMap<String, BankAccount>();
+        acctMap = new HashMap<String, CheckingAccount>();
     }
 
     //----------------- BasicAPI methods -------------------------//
@@ -45,7 +45,7 @@ public class CentralBank implements AdvancedAPI, AdminAPI {
 
 
     public void createAccount(String email, String password, double startingBalance) throws AccountAlreadyExistsException, IllegalArgumentException {
-        this.addAccount(new BankAccount(email, password, startingBalance), email);
+        this.addAccount(new CheckingAccount(email, password, startingBalance), email);
     }
 
     public void closeAccount(String email) throws AccountNotFoundException, IllegalArgumentException{
@@ -59,7 +59,15 @@ public class CentralBank implements AdvancedAPI, AdminAPI {
     //------------------ AdminAPI methods -------------------------//
 
     public double calcTotalAssets() {
-        return 0;
+        Collection<CheckingAccount> checkingAccountCollection = acctMap.values();
+        double total = 0.0;
+        if (checkingAccountCollection.isEmpty()) return 0.0;
+        for (CheckingAccount acc : checkingAccountCollection) {
+            if (acc == null) System.out.println("acc is null");
+            if (checkingAccountCollection == null) System.out.println("collection is null");
+            total += acc.getBalance();
+        }
+        return total;
     }
 
     public Collection<String> findAcctIdsWithSuspiciousActivity() {
@@ -88,7 +96,7 @@ public class CentralBank implements AdvancedAPI, AdminAPI {
      * @post adds the given account to the list of accounts in the central bank
      * @throws AccountAlreadyExistsException if the given email is already associated with an account
      */
-    protected void addAccount(BankAccount ba, String email) throws AccountAlreadyExistsException{
+    protected void addAccount(CheckingAccount ba, String email) throws AccountAlreadyExistsException{
         if(acctMap.containsKey(email)){
             throw new AccountAlreadyExistsException("Account with ID " + email + " already exists!");
         }
@@ -100,7 +108,7 @@ public class CentralBank implements AdvancedAPI, AdminAPI {
      * @returns the account associated with the given email
      * @throws AccountNotFoundException if the given email is not associated with an account
      */
-    protected BankAccount getAcctByID(String email) throws AccountNotFoundException{
+    protected CheckingAccount getAcctByID(String email) throws AccountNotFoundException{
         if(acctMap.containsKey(email)){
             return acctMap.get(email);
         }
